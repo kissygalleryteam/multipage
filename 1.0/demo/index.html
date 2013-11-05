@@ -11,7 +11,11 @@
 <body>
 <h2>multipage的demo</h2>
 
-<div id="ks-w-multipage">
+
+<style type="text/css">
+.hidden { display: none;}
+</style>
+<div id="ks-w-multipage" class="hidden">
 	
 </div>
 
@@ -33,12 +37,25 @@
     }
 
     S.use('gallery/multipage/1.0/index', function (S, Multipage) {
-		new Multipage({
+		var multipage = new Multipage({
 			wrap : '#ks-w-multipage',
-			superPageSize : 3,
+			superPageSize : 4,
 			totalPage : 100
 		});
-    })
+
+		multipage.setPageIndex(4);
+		
+		multipage.on('goToSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+		multipage.on('nextSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+
+		multipage.on('prevSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+    });
 </script>
 </body>
 </html>

@@ -36,7 +36,17 @@ KISSY.add(function (S, Node,Base) {
 			this.set('selectPage' , $('<select class="ks-page-index">' + optionArr.join('') + '</select>'));
 
 			$(this.get('wrap')).append(this.get('prevBtn')).append(this.get('selectPage')).append(this.get('nextBtn'));
+
+			this.pageStatus();
+			this.btnStatus();
+			this.selectHandle();
 			return this;
+		},
+		
+		// 操作下拉框选中状态
+		selectHandle : function () {
+			var superPageIndex = this.get('superPageIndex');
+			this.get('selectPage').val(superPageIndex);
 		},
 
 		// 根据totalpage计算
@@ -48,26 +58,112 @@ KISSY.add(function (S, Node,Base) {
 			return totalSuperPage;
 		},
 
-		// 代理事件
+		// 绑定事件
 		bindEvent : function () {
+			var self =this;
 			var wrap = $(this.get('wrap')) , selectPage = this.get('selectPage');			
-			wrap.delegate('click' , '.ks-w-prev' , this.prev).delegate('click' , '.ks-w-next' , this.next);
-			selectPage.on('change' , this.select);
+			wrap.delegate('click' , '.ks-w-prev' , function (e) {
+				self.prev.call(self , e);
+			}).delegate('click' , '.ks-w-next' , function (e) {
+				self.next.call(self , e);
+			});
+			selectPage.on('change' , function (e) {
+				self.select.call(self , e);
+			});
+
+			this.on('afterPageIndexChange' , function (e) {
+				var index = e.newVal;
+				self.pageStatus();
+			}).on('afterSuperPageIndexChange' , function (e) {
+				self.selectHandle();
+				self.btnStatus();	
+			});
+
 		},
 
 		// 点击上一页按钮
 		prev : function (e) {
-			alert($(e.currentTarget).html())	   
+			var superPageIndex = this.get('superPageIndex');
+			var superPageSize = this.get('superPageSize');
+			this.set('superPageIndex' , superPageIndex - 1);
+			this.fire('prevSuperPage' , {
+				pageIndex : (superPageIndex  - 2) * superPageSize + 1	
+			});
 		},
 		
 		// 点击下一页按钮
 		next : function (e) {
-			alert($(e.currentTarget).html())	   
+			var superPageIndex = this.get('superPageIndex');
+			var superPageSize = this.get('superPageSize');
+			this.set('superPageIndex' , superPageIndex + 1);
+			this.fire('goToSuperPage' , {
+				pageIndex : superPageIndex * superPageSize + 1	
+			});
 		},
 
 		// 选择分页
 		select : function (e) {
-			alert($(e.currentTarget).val())
+			var superPageIndex = this.get('superPageIndex');
+			var superPageSize = this.get('superPageSize');
+			var val = Number($(e.currentTarget).val());
+			this.set('superPageIndex' , val);
+
+			this.fire('goToSuperPage' , {
+				pageIndex : (val - 1) * superPageSize + 1	
+			});
+		},
+		
+		// 自动判断是否显示分页组件
+		pageStatus : function () {
+			var pageIndex = this.get('pageIndex');	
+			var superPageSize = this.get('superPageSize');
+			if (pageIndex % superPageSize === 0) {
+				this.showPage();	
+			} else {
+				this.hidePage();	
+			}
+		},
+
+		// 自动判断并执行显示、隐藏“上一页”“下一页”按钮
+		btnStatus : function () {
+			var superPageIndex = this.get('superPageIndex');
+			var totalSuperPage = this.getTotalSuperPage();
+			
+			var nextBtn = this.get('nextBtn') , prevBtn = this.get('prevBtn');
+
+			if (totalSuperPage === 1) {
+				prevBtn.addClass('hidden');
+				nextBtn.addClass('hidden');
+			}
+			// 末页
+			if (superPageIndex === totalSuperPage) {
+				prevBtn.removeClass('hidden');
+				nextBtn.addClass('hidden');
+			} else if (superPageIndex === 1) {
+				// 首页	
+				prevBtn.addClass('hidden');
+				nextBtn.removeClass('hidden');
+			} else {
+				prevBtn.removeClass('hidden');	
+				nextBtn.removeClass('hidden');	
+			}
+		},
+		
+		// 设置super分页的子分页索引
+		setPageIndex : function (number) {
+			this.set('pageIndex' , number);
+		},
+		
+		// 显示分页
+		showPage : function () {
+			var page = $(this.get('wrap'));
+			page.removeClass('hidden');
+		},
+		
+		// 隐藏分页
+		hidePage : function () {
+			var page = $(this.get('wrap'));
+			page.addClass('hidden');
 		}
 
     } , {
