@@ -1,9 +1,15 @@
+/*
+combined files : 
+
+gallery/multipage/1.0/index
+
+*/
 /**
  * @fileoverview 
  * @author 栋寒<donghan@taobao.com>
  * @module multipage
  **/
-KISSY.add(function (S, Node,Base) {
+KISSY.add('gallery/multipage/1.0/index',function (S, Node,Base) {
     var EMPTY = '';
     var $ = Node.all;
     /**
@@ -203,6 +209,7 @@ KISSY.add(function (S, Node,Base) {
 		'rich-base'
 	]
 });
+
 
 
 

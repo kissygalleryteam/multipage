@@ -13,11 +13,12 @@
 
 
 <style type="text/css">
+.disable { color: #999; }
 .hidden { display: none;}
 </style>
-<div id="ks-w-multipage" class="hidden">
-	
-</div>
+
+<div id="ks-w-multipage" class="hidden"></div>
+<div id="ks-w-multipage1" class="hidden"></div>
 
 
 <script>
@@ -37,13 +38,14 @@
     }
 
     S.use('gallery/multipage/1.0/index', function (S, Multipage) {
+
+		// 实例对象1 {{
 		var multipage = new Multipage({
 			wrap : '#ks-w-multipage',
-			superPageSize : 4,
+			superPageSize : 1,
 			totalPage : 100
 		});
 
-		multipage.setPageIndex(4);
 		
 		multipage.on('goToSuperPage' , function (e) {
 			alert('前往子分页:' + e.pageIndex);
@@ -53,6 +55,29 @@
 		});
 
 		multipage.on('prevSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+		// 实例对象1 }}
+
+
+
+
+		var multipage1 = new Multipage({
+			wrap : '#ks-w-multipage1',
+			superPageSize : 4,
+			totalPage : 100
+		});
+
+		multipage1.setPageIndex(4);
+		
+		multipage1.on('goToSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+		multipage1.on('nextSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+
+		multipage1.on('prevSuperPage' , function (e) {
 			alert('前往子分页:' + e.pageIndex);
 		});
     });
