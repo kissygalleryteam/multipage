@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=2.0.0, maximum-scale=2.0.0, user-scalable=0" />
+<meta name="format-detection" content="telephone=no" />
+<title>multipage的demo</title>
+<script src="http://g.tbcdn.cn/kissy/k/1.3.0/kissy-min.js" charset="utf-8"></script>
+<link rel="stylesheet" href="http://g.tbcdn.cn/kissy/k/1.3.0/css/dpl/base-min.css">
+<script>var S = KISSY;S.config({packages:[{name:"kg",path:"http://g.tbcdn.cn/kg/",charset:"utf-8",ignorePackageNameInUri:true}]});if (S.Config.debug){var srcPath = "../";S.config({packages:[{name:"kg/multipage/2.0.0",path:srcPath,charset:"utf-8",ignorePackageNameInUri:true}]});}</script></head>
+<body>
+<h2>multipage的demo</h2>
+
+
+<style type="text/css">
+.disable { color: #999; }
+.hidden { display: none;}
+</style>
+
+<div id="ks-w-multipage" class="hidden"></div>
+<div id="ks-w-multipage1" class="hidden"></div>
+
+
+<script>
+    var S = KISSY;
+    if (S.Config.debug) {
+        var srcPath = "../../../";
+        S.config({
+            packages:[
+                {
+                    name:"gallery-back",
+                    path:srcPath,
+                    charset:"utf-8",
+                    ignorePackageNameInUri:true
+                }
+            ]
+        });
+    }
+
+    S.use('kg/multipage/2.0.0/index', function (S, Multipage) {
+
+		// 实例对象1 {{
+		var multipage = new Multipage({
+			wrap : '#ks-w-multipage',
+			superPageSize : 1,
+			totalPage : 2.0.0
+		});
+
+		
+		multipage.on('goToSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+		multipage.on('nextSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+
+		multipage.on('prevSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+		// 实例对象1 }}
+
+
+
+
+		var multipage1 = new Multipage({
+			wrap : '#ks-w-multipage1',
+			superPageSize : 4,
+			totalPage : 2.0.0
+		});
+
+		multipage1.setPageIndex(4);
+		
+		multipage1.on('goToSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+		multipage1.on('nextSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+
+		multipage1.on('prevSuperPage' , function (e) {
+			alert('前往子分页:' + e.pageIndex);
+		});
+    });
+</script>
+</body>
+</html>
